@@ -2,6 +2,7 @@
 
 import { randomBytes } from "crypto";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/session";
@@ -258,10 +259,17 @@ export async function addStaff(fd: FormData) {
   const d = z
     .object({ displayName: str(60), role: z.enum(ROLES), discordId: opt(30), robloxId: opt(30), title: opt(60) })
     .parse(obj(fd));
-  if (!d.discordId && !d.robloxId) throw new Error("Provide a Discord ID or Roblox ID.");
+  const back = (msg: string) => redirect(`/hub/executive/staff?error=${encodeURIComponent(msg)}`);
+  if (!d.discordId && !d.robloxId) back("Provide a Discord ID or a Roblox ID.");
+  const or: { discordId?: string; robloxId?: string }[] = [];
+  if (d.discordId) or.push({ discordId: d.discordId });
+  if (d.robloxId) or.push({ robloxId: d.robloxId });
+  const existing = await db.staffUser.findFirst({ where: { OR: or } });
+  if (existing) back(`That ID already belongs to ${existing.displayName}${existing.active ? "" : " (deactivated)"}. Edit that user below instead.`);
   await db.staffUser.create({ data: d });
   revalidatePath("/hub/executive/staff");
   revalidatePath("/staff");
+  redirect("/hub/executive/staff?added=1");
 }
 
 export async function updateStaff(fd: FormData) {

@@ -6,12 +6,18 @@ import { addStaff, updateStaff } from "../../actions";
 
 const roles = Object.keys(ROLE_LABEL) as (keyof typeof ROLE_LABEL)[];
 
-export default async function StaffAccess() {
+export default async function StaffAccess({ searchParams }: { searchParams: { error?: string; added?: string } }) {
   const me = await requireUser(canManageStaff);
   const staff = await db.staffUser.findMany({ orderBy: [{ active: "desc" }, { displayName: "asc" }] });
   return (
     <>
       <PageTitle title="Staff Access Management" sub="Whitelist users into the Staff Hub and manage their roles." />
+      {searchParams.error && (
+        <div className="mb-4 max-w-3xl rounded-lg border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-300">{searchParams.error}</div>
+      )}
+      {searchParams.added && (
+        <div className="mb-4 max-w-3xl rounded-lg border border-emerald-500/40 bg-emerald-500/10 p-3 text-sm text-emerald-300">User whitelisted.</div>
+      )}
       <form action={addStaff} className="card grid max-w-3xl gap-3 sm:grid-cols-2">
         <Field label="Display name"><input name="displayName" required className="input" /></Field>
         <Field label="Role">
