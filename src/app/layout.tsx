@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXTAUTH_URL || "http://localhost:3000"),
   title: { default: "Nosploit", template: "%s · Nosploit" },
   description: "Roblox's #1 tech group specialising in smart moderation systems.",
   icons: { icon: "/logo.png", apple: "/logo.png" },

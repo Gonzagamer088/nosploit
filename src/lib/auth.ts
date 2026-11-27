@@ -29,6 +29,8 @@ export const authOptions: NextAuthOptions = {
     DiscordProvider({
       clientId: process.env.DISCORD_CLIENT_ID ?? "",
       clientSecret: process.env.DISCORD_CLIENT_SECRET ?? "",
+      // Discord returns an `iss` param on the callback; openid-client requires an issuer to be set
+      issuer: "https://discord.com",
     }),
     RobloxProvider,
   ],
