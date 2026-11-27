@@ -20,6 +20,10 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
       </header>
       <main className="flex-1">{children}</main>
       <footer className="border-t border-line py-6 text-center text-xs text-slate-500">
+        <div className="mb-2 flex justify-center gap-4">
+          <Link href="/privacy" className="hover:text-slate-300">Privacy Policy</Link>
+          <Link href="/terms" className="hover:text-slate-300">Terms of Service</Link>
+        </div>
         © {new Date().getFullYear()} Nosploit. All rights reserved.
       </footer>
     </div>

@@ -284,6 +284,24 @@ export async function updateStaff(fd: FormData) {
   revalidatePath("/staff");
 }
 
+/* ---------------- Legal pages (Executive) ---------------- */
+
+export async function saveLegalPage(fd: FormData) {
+  await requireUser(canManageStaff);
+  const d = z.object({ slug: z.enum(["privacy", "terms"]), title: str(100), content: str(50000) }).parse(obj(fd));
+  await db.legalPage.upsert({ where: { slug: d.slug }, create: d, update: { title: d.title, content: d.content } });
+  revalidatePath(`/${d.slug}`);
+  revalidatePath("/hub/executive/legal");
+}
+
+export async function resetLegalPage(fd: FormData) {
+  await requireUser(canManageStaff);
+  const d = z.object({ slug: z.enum(["privacy", "terms"]) }).parse(obj(fd));
+  await db.legalPage.deleteMany({ where: { slug: d.slug } });
+  revalidatePath(`/${d.slug}`);
+  revalidatePath("/hub/executive/legal");
+}
+
 /* ---------------- Notifications ---------------- */
 
 export async function markNotificationsRead() {

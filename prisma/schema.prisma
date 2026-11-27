@@ -150,6 +150,14 @@ model LicenseRequest {
   resolvedAt  DateTime?
 }
 
+/// Editable legal pages (slug: "privacy" | "terms"). Falls back to defaults in src/lib/legal.ts.
+model LegalPage {
+  slug      String   @id
+  title     String
+  content   String
+  updatedAt DateTime @updatedAt
+}
+
 enum SubjectType {
   GROUP
   USER

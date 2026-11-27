@@ -48,7 +48,7 @@ export default async function HubLayout({ children }: { children: React.ReactNod
         ["/hub/ceo/tasks", "Delegate Tasks"],
       ],
     });
-  if (canManageStaff(r)) groups.push({ title: "Executive", links: [["/hub/executive/staff", "Staff Access"]] });
+  if (canManageStaff(r)) groups.push({ title: "Executive", links: [["/hub/executive/staff", "Staff Access"], ["/hub/executive/legal", "Legal Pages"]] });
 
   return (
     <Providers>
