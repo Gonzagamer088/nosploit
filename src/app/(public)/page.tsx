@@ -16,8 +16,10 @@ export default function Home() {
         <div className="orb -left-20 top-0 h-80 w-80 bg-brand" />
         <div className="orb -right-10 top-40 h-72 w-72 bg-fuchsia-500 [animation-delay:-6s]" />
         <div className="relative mx-auto max-w-6xl px-5 py-28 text-center">
-          <div className="reveal float mb-6 flex justify-center drop-shadow-[0_0_40px_rgba(109,94,252,0.55)]">
-            <Logo size={128} />
+          <div className="reveal mb-6 flex justify-center">
+            <div className="float drop-shadow-[0_0_40px_rgba(109,94,252,0.55)]">
+              <Logo size={128} />
+            </div>
           </div>
           <span className="reveal badge bg-white/5 text-slate-300 backdrop-blur" style={delay(1)}>
             Roblox&apos;s #1 tech group for smart moderation
