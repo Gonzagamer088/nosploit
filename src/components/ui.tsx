@@ -4,6 +4,11 @@ import { STATUS_LABEL } from "@/lib/rbac";
 export const ROBLOX_URL = process.env.NEXT_PUBLIC_ROBLOX_GROUP_URL || "https://www.roblox.com";
 export const DISCORD_URL = process.env.NEXT_PUBLIC_DISCORD_INVITE_URL || "https://discord.com";
 
+export function Logo({ size = 32 }: { size?: number }) {
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src="/logo.png" alt="Nosploit logo" width={size} height={size} style={{ width: size, height: size }} />;
+}
+
 export function Avatar({ src, name, size = 64 }: { src?: string | null; name: string; size?: number }) {
   return src ? (
     // eslint-disable-next-line @next/next/no-img-element

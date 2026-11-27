@@ -2,6 +2,7 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/session";
 import { ROLE_LABEL, canDev, canInvestigation, canManageQueue, canManageStaff, canSales, isCEO, canAssignClients } from "@/lib/rbac";
+import { Logo } from "@/components/ui";
 import Providers from "@/components/Providers";
 import { SignOutButton } from "@/components/AuthButtons";
 
@@ -54,8 +55,9 @@ export default async function HubLayout({ children }: { children: React.ReactNod
     <Providers>
       <div className="flex min-h-screen">
         <aside className="flex w-60 shrink-0 flex-col border-r border-line bg-panel p-4">
-          <Link href="/hub" className="text-lg font-extrabold text-white">
-            NO<span className="text-brand-soft">SPLOIT</span> <span className="text-xs font-normal text-slate-500">Hub</span>
+          <Link href="/hub" className="flex items-center gap-2 text-lg font-extrabold text-white">
+            <Logo size={30} />
+            <span>NO<span className="text-brand-soft">SPLOIT</span> <span className="text-xs font-normal text-slate-500">Hub</span></span>
           </Link>
           <nav className="mt-6 flex-1 space-y-5 overflow-y-auto">
             {groups.map((g) => (

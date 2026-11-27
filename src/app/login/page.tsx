@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SignInButtons } from "@/components/AuthButtons";
+import { Logo } from "@/components/ui";
 import Providers from "@/components/Providers";
 
 export const metadata = { title: "Staff login" };
@@ -9,6 +10,7 @@ export default function Login({ searchParams }: { searchParams: { error?: string
   return (
     <div className="flex min-h-screen items-center justify-center px-5">
       <div className="card w-full max-w-sm">
+        <div className="mb-3"><Logo size={56} /></div>
         <h1 className="text-xl font-bold text-white">Staff Hub</h1>
         <p className="mb-5 mt-1 text-sm text-slate-400">Sign in with an account that has been whitelisted by the Executive Team.</p>
         {err && (
