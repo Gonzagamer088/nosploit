@@ -1,0 +1,203 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CEO
+  COO
+  CCO
+  DIRECTOR_SALES
+  SALES
+  INVESTIGATOR
+  DIRECTOR_ENGINEERING
+  DEVELOPER
+}
+
+enum ClientStatus {
+  CLIENT
+  AFFILIATE
+  IN_TALKS
+  DECLINED
+  UNABLE_TO_SERVE
+  ENDED
+  SUSPENDED
+}
+
+enum CaseType {
+  SOFT_SUSPENSION
+  REGULAR_SUSPENSION
+  PERMANENT_SUSPENSION
+  APPEALED_SUSPENSION
+  GROUP_BLACKLIST
+  USER_BLACKLIST
+}
+
+enum TargetType {
+  USER
+  GROUP
+}
+
+enum RequestKind {
+  CREATE
+  SUSPEND
+}
+
+enum RequestStatus {
+  PENDING
+  COMPLETED
+  REJECTED
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+model StaffUser {
+  id            String   @id @default(cuid())
+  discordId     String?  @unique
+  robloxId      String?  @unique
+  displayName   String
+  avatarUrl     String?
+  role          Role
+  title         String?
+  bio           String?
+  active        Boolean  @default(true)
+  publicVisible Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  clients       Client[]         @relation("AssignedRep")
+  announcements Announcement[]
+  cases         Case[]
+  requests      LicenseRequest[] @relation("Requester")
+  resolved      LicenseRequest[] @relation("Resolver")
+  notifications Notification[]
+  createdTasks  Task[]           @relation("TaskCreator")
+  assignedTasks Task[]           @relation("TaskAssignee")
+}
+
+model Client {
+  id                     String        @id @default(cuid())
+  slug                   String        @unique
+  name                   String
+  robloxGroupId          String?
+  robloxUrl              String?
+  discordInvite          String?
+  logoUrl                String?
+  description            String?
+  adText                 String?
+  status                 ClientStatus  @default(IN_TALKS)
+  statusBeforeSuspension ClientStatus?
+  assignedRepId          String?
+  assignedRep            StaffUser?    @relation("AssignedRep", fields: [assignedRepId], references: [id])
+  createdAt              DateTime      @default(now())
+
+  announcements Announcement[]
+  cases         Case[]
+  requests      LicenseRequest[]
+  licenses      License[]
+}
+
+model Announcement {
+  id        String    @id @default(cuid())
+  clientId  String
+  client    Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  title     String
+  body      String
+  authorId  String
+  author    StaffUser @relation(fields: [authorId], references: [id])
+  createdAt DateTime  @default(now())
+}
+
+model Case {
+  id             String     @id @default(cuid())
+  type           CaseType
+  targetType     TargetType
+  targetRobloxId String?
+  targetName     String
+  reason         String
+  evidence       String?
+  active         Boolean    @default(true)
+  clientId       String?
+  client         Client?    @relation(fields: [clientId], references: [id])
+  createdById    String
+  createdBy      StaffUser  @relation(fields: [createdById], references: [id])
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+}
+
+model LicenseRequest {
+  id          String        @id @default(cuid())
+  kind        RequestKind
+  clientId    String
+  client      Client        @relation(fields: [clientId], references: [id])
+  requesterId String
+  requester   StaffUser     @relation("Requester", fields: [requesterId], references: [id])
+  notes       String?
+  product     String        @default("default")
+  status      RequestStatus @default(PENDING)
+  licenseKey  String?
+  resolverId  String?
+  resolver    StaffUser?    @relation("Resolver", fields: [resolverId], references: [id])
+  createdAt   DateTime      @default(now())
+  resolvedAt  DateTime?
+}
+
+enum SubjectType {
+  GROUP
+  USER
+  GAME
+}
+
+enum LicenseStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+/// Issued license: identifies who (subject) may use which product.
+model License {
+  id          String        @id @default(cuid())
+  key         String        @unique
+  product     String
+  subjectType SubjectType
+  subjectId   String
+  clientId    String
+  client      Client        @relation(fields: [clientId], references: [id])
+  status      LicenseStatus @default(ACTIVE)
+  expiresAt   DateTime?
+  createdAt   DateTime      @default(now())
+
+  @@unique([product, subjectType, subjectId])
+  @@index([clientId])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  user      StaffUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  message   String
+  link      String?
+  read      Boolean   @default(false)
+  createdAt DateTime  @default(now())
+}
+
+model Task {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  status      TaskStatus @default(TODO)
+  inQueue     Boolean    @default(false)
+  createdById String
+  createdBy   StaffUser  @relation("TaskCreator", fields: [createdById], references: [id])
+  assigneeId  String?
+  assignee    StaffUser? @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
