@@ -1,6 +1,6 @@
 # Nosploit Web
 
-Public website + internal Staff Hub (RBAC). Next.js 14, Prisma, PostgreSQL (installed on the host), Auth.js (Discord + Roblox), Docker Compose + Caddy.
+Public website + internal Staff Hub (RBAC). Next.js 14, Prisma, PostgreSQL (installed on the host), Auth.js (Discord + Roblox), Docker Compose, published through an existing Cloudflare Tunnel.
 
 ## Deploy on Ubuntu
 
@@ -25,7 +25,7 @@ sudo sed -i "s/^#\?listen_addresses.*/listen_addresses = 'localhost,172.17.0.1'/
 echo "host nosploit nosploit 172.16.0.0/12 scram-sha-256" | sudo tee -a /etc/postgresql/$PGV/main/pg_hba.conf
 sudo systemctl restart postgresql
 # keep 5432 closed to the internet
-sudo ufw allow 80,443/tcp && sudo ufw allow OpenSSH && sudo ufw enable
+sudo ufw allow OpenSSH   # no 80/443 needed: the Cloudflare tunnel connects outbound && sudo ufw enable
 ```
 Do not open port 5432 in the firewall.
 
@@ -33,7 +33,7 @@ Do not open port 5432 in the firewall.
 ```bash
 cp .env.example .env && nano .env
 ```
-Set `DOMAIN`, `NEXTAUTH_URL` (`https://your-domain`), `NEXTAUTH_SECRET` (`openssl rand -base64 32`), the DB password in `DATABASE_URL`, OAuth credentials, public links, and `INITIAL_CEO_DISCORD_ID` / `INITIAL_CEO_ROBLOX_ID`.
+Set `NEXTAUTH_URL` (`https://your-domain`), `NEXTAUTH_SECRET` (`openssl rand -base64 32`), the DB password in `DATABASE_URL`, OAuth credentials, public links, and `INITIAL_CEO_DISCORD_ID` / `INITIAL_CEO_ROBLOX_ID`.
 
 OAuth redirect URLs to register:
 - Discord: `https://your-domain/api/auth/callback/discord`
@@ -45,7 +45,7 @@ docker compose build
 docker compose --profile tools run --rm migrate   # creates tables + seeds first CEO
 docker compose up -d
 ```
-Point your DNS A record to the server; Caddy issues HTTPS automatically.
+In the Cloudflare Zero Trust dashboard (or your cloudflared config.yml), add a public hostname for your domain with service `http://localhost:3000`. Cloudflare provides HTTPS; the app only listens on `127.0.0.1:3000`.
 
 ### Update
 ```bash

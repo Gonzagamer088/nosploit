@@ -40,7 +40,8 @@ function authorized(req: Request) {
  * Response: { valid: boolean, status: "valid"|"not_found"|"suspended"|"expired"|"key_mismatch", expiresAt? }
  */
 export async function POST(req: Request) {
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
+  // Behind the Cloudflare tunnel the real client IP is in cf-connecting-ip
+  const ip = req.headers.get("cf-connecting-ip") ?? req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
   if (limited(ip)) return NextResponse.json({ valid: false, status: "rate_limited" }, { status: 429 });
   if (!authorized(req)) return NextResponse.json({ valid: false, status: "unauthorized" }, { status: 401 });
 

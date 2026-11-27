@@ -1,5 +1,6 @@
 # PostgreSQL runs directly on the Ubuntu host (not in Docker).
-# Containers reach it through host.docker.internal -> host gateway.
+# HTTPS/public access is handled by the existing Cloudflare tunnel (cloudflared on the host),
+# which should point to http://localhost:3000.
 services:
   web:
     build:
@@ -11,22 +12,9 @@ services:
     env_file: .env
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    expose:
-      - "3000"
-
-  caddy:
-    image: caddy:2
-    restart: unless-stopped
-    depends_on: [web]
     ports:
-      - "80:80"
-      - "443:443"
-    environment:
-      DOMAIN: ${DOMAIN}
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
+      # Bound to loopback only: reachable by cloudflared, not from the internet
+      - "127.0.0.1:3000:3000"
 
   # One-off tool: docker compose --profile tools run --rm migrate
   # Creates/updates tables and seeds the first CEO.
@@ -39,7 +27,3 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     command: sh -c "npx prisma db push && npx tsx prisma/seed.ts"
-
-volumes:
-  caddy_data:
-  caddy_config:
