@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { STATUS_LABEL } from "@/lib/rbac";
 
-export const ROBLOX_URL = process.env.NEXT_PUBLIC_ROBLOX_GROUP_URL || "https://www.roblox.com";
-export const DISCORD_URL = process.env.NEXT_PUBLIC_DISCORD_INVITE_URL || "https://discord.com";
+export const ROBLOX_URL = process.env.NEXT_PUBLIC_ROBLOX_GROUP_URL || "https://www.roblox.com/communities/988993149/Nosploit#!/about";
+export const DISCORD_URL = process.env.NEXT_PUBLIC_DISCORD_INVITE_URL || "https://discord.gg/zjxvdWdwgS";
+export const PORTFOLIO_URL = "https://nosploit.carrd.co/";
 
 export function Logo({ size = 32 }: { size?: number }) {
   // eslint-disable-next-line @next/next/no-img-element
