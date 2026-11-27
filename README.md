@@ -1,6 +1,6 @@
 # Nosploit Web
 
-Public website + internal Staff Hub (RBAC). Next.js 14, Prisma, PostgreSQL (installed on the host), Auth.js (Discord + Roblox), Docker Compose, published through an existing Cloudflare Tunnel.
+Public website + internal Staff Hub (RBAC). Next.js 14, Prisma, PostgreSQL (installed on the host), Auth.js (Discord + Roblox), Docker Compose, published through an existing Cloudflare Tunnel. (LAST VERSION A)
 
 ## Deploy on Ubuntu
 
