@@ -2,7 +2,7 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { requireUser } from "@/lib/session";
 import { ROLE_LABEL, canDev, canInvestigation, canManageQueue, canManageStaff, canSales, isCEO, canAssignClients } from "@/lib/rbac";
-import { Logo } from "@/components/ui";
+import { Logo, Wordmark } from "@/components/ui";
 import Providers from "@/components/Providers";
 import { SignOutButton } from "@/components/AuthButtons";
 
@@ -54,17 +54,17 @@ export default async function HubLayout({ children }: { children: React.ReactNod
   return (
     <Providers>
       <div className="flex min-h-screen">
-        <aside className="flex w-60 shrink-0 flex-col border-r border-line bg-panel p-4">
+        <aside className="flex w-60 shrink-0 flex-col border-r border-line bg-panel/90 p-4 backdrop-blur">
           <Link href="/hub" className="flex items-center gap-2 text-lg font-extrabold text-white">
             <Logo size={30} />
-            <span>NO<span className="text-brand-soft">SPLOIT</span> <span className="text-xs font-normal text-slate-500">Hub</span></span>
+            <span><Wordmark /> <span className="text-xs font-normal text-slate-500">Hub</span></span>
           </Link>
           <nav className="mt-6 flex-1 space-y-5 overflow-y-auto">
             {groups.map((g) => (
               <div key={g.title}>
                 <div className="mb-1 text-xs font-bold uppercase tracking-widest text-slate-500">{g.title}</div>
                 {g.links.map(([href, label]) => (
-                  <Link key={href} href={href} className="block rounded-md px-2 py-1.5 text-sm text-slate-300 hover:bg-white/5 hover:text-white">
+                  <Link key={href} href={href} className="block rounded-md border-l-2 border-transparent px-2 py-1.5 text-sm text-slate-300 transition-all duration-200 hover:translate-x-1 hover:border-brand hover:bg-white/5 hover:text-white">
                     {label}
                   </Link>
                 ))}

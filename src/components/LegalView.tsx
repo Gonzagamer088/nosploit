@@ -23,7 +23,7 @@ export default function LegalView({ title, content, updatedAt }: { title: string
   });
   flush(-1);
   return (
-    <div className="mx-auto max-w-3xl px-5 py-16">
+    <div className="reveal mx-auto max-w-3xl px-5 py-16">
       <h1 className="text-4xl font-extrabold text-white">{title}</h1>
       {blocks}
       <p className="mt-10 border-t border-line pt-4 text-xs text-slate-500">

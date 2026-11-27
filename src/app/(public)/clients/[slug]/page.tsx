@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { isPubliclyVisible } from "@/lib/rbac";
-import { Avatar, StatusBadge } from "@/components/ui";
+import { Avatar, StatusBadge, delay } from "@/components/ui";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +14,7 @@ export default async function ClientPage({ params }: { params: { slug: string } 
   if (!c || !isPubliclyVisible(c.status)) notFound();
   return (
     <div className="mx-auto max-w-4xl px-5 py-16">
-      <div className="flex items-center gap-4">
+      <div className="reveal group flex items-center gap-4">
         <Avatar src={c.logoUrl} name={c.name} size={80} />
         <div>
           <h1 className="text-3xl font-extrabold text-white">{c.name}</h1>
@@ -34,8 +34,8 @@ export default async function ClientPage({ params }: { params: { slug: string } 
       </div>
       <h2 className="mt-12 text-xl font-bold text-white">Announcements</h2>
       <div className="mt-4 space-y-3">
-        {c.announcements.map((a) => (
-          <div key={a.id} className="card">
+        {c.announcements.map((a, i) => (
+          <div key={a.id} className="card card-hover reveal" style={delay(i)}>
             <div className="flex justify-between">
               <h3 className="font-semibold text-white">{a.title}</h3>
               <span className="text-xs text-slate-500">{a.createdAt.toLocaleDateString("en-US")}</span>

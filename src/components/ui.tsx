@@ -10,12 +10,20 @@ export function Logo({ size = 32 }: { size?: number }) {
   return <img src="/logo.png" alt="Nosploit logo" width={size} height={size} style={{ width: size, height: size }} />;
 }
 
+/** Brand name in a single colour. */
+export function Wordmark({ className = "" }: { className?: string }) {
+  return <span className={`font-extrabold tracking-tight text-white ${className}`}>NOSPLOIT</span>;
+}
+
+/** Stagger helper for the `.reveal` animation. */
+export const delay = (i: number, step = 70) => ({ animationDelay: `${i * step}ms` });
+
 export function Avatar({ src, name, size = 64 }: { src?: string | null; name: string; size?: number }) {
   return src ? (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={src} alt={name} width={size} height={size} className="rounded-full object-cover" style={{ width: size, height: size }} />
+    <img src={src} alt={name} width={size} height={size} className="rounded-full object-cover ring-2 ring-line transition group-hover:ring-brand/60" style={{ width: size, height: size }} />
   ) : (
-    <div className="flex items-center justify-center rounded-full bg-brand/30 font-bold text-brand-soft" style={{ width: size, height: size }}>
+    <div className="flex items-center justify-center rounded-full bg-gradient-to-br from-brand/50 to-brand/20 font-bold text-white" style={{ width: size, height: size }}>
       {name.slice(0, 1).toUpperCase()}
     </div>
   );
@@ -37,7 +45,7 @@ export function StatusBadge({ status }: { status: string }) {
 
 export function PageTitle({ title, sub }: { title: string; sub?: string }) {
   return (
-    <div className="mb-6">
+    <div className="reveal mb-6">
       <h1 className="text-2xl font-bold text-white">{title}</h1>
       {sub && <p className="mt-1 text-sm text-slate-400">{sub}</p>}
     </div>
@@ -56,7 +64,7 @@ export function Field({ label, children }: { label: string; children: React.Reac
 export function CTAButtons() {
   return (
     <div className="flex flex-wrap gap-3">
-      <a href={ROBLOX_URL} target="_blank" rel="noopener noreferrer" className="btn-primary px-6 py-3 text-base">
+      <a href={ROBLOX_URL} target="_blank" rel="noopener noreferrer" className="btn-primary px-6 py-3 text-base [animation:pulse-ring_2.4s_ease-out_infinite]">
         Join our Roblox Group
       </a>
       <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer" className="btn-ghost px-6 py-3 text-base">
@@ -68,7 +76,7 @@ export function CTAButtons() {
 
 export function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <Link href={href} className="text-sm text-slate-300 hover:text-white">
+    <Link href={href} className="relative text-sm text-slate-300 after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-brand after:transition-all after:duration-300 hover:text-white hover:after:w-full">
       {children}
     </Link>
   );

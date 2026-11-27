@@ -9,8 +9,8 @@ export default function Login({ searchParams }: { searchParams: { error?: string
   const err = searchParams.error;
   return (
     <div className="flex min-h-screen items-center justify-center px-5">
-      <div className="card w-full max-w-sm">
-        <div className="mb-3"><Logo size={56} /></div>
+      <div className="card reveal w-full max-w-sm shadow-2xl shadow-brand/10">
+        <div className="float mb-3"><Logo size={64} /></div>
         <h1 className="text-xl font-bold text-white">Staff Hub</h1>
         <p className="mb-5 mt-1 text-sm text-slate-400">Sign in with an account that has been whitelisted by the Executive Team.</p>
         {err && (

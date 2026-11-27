@@ -1,4 +1,4 @@
-import { CTAButtons, PORTFOLIO_URL } from "@/components/ui";
+import { CTAButtons, PORTFOLIO_URL, delay } from "@/components/ui";
 
 export const metadata = { title: "About" };
 
@@ -22,13 +22,13 @@ const features = [
 export default function About() {
   return (
     <div className="mx-auto max-w-4xl px-5 py-16">
-      <h1 className="text-4xl font-extrabold text-white">About Nosploit</h1>
+      <h1 className="reveal text-4xl font-extrabold text-white">About Nosploit</h1>
       <p className="mt-4 text-lg text-slate-400">
         Nosploit is Roblox&apos;s #1 tech group specialising in smart moderation systems.
       </p>
       <div className="mt-10 grid gap-4 sm:grid-cols-2">
-        {items.map(([t, d]) => (
-          <div key={t} className="card">
+        {items.map(([t, d], i) => (
+          <div key={t} className="card card-hover reveal" style={delay(i)}>
             <h3 className="font-semibold text-white">{t}</h3>
             <p className="mt-2 text-sm text-slate-400">{d}</p>
           </div>
@@ -43,7 +43,7 @@ export default function About() {
         products to make your own project strive today!
       </p>
       <div className="mt-6"><CTAButtons /></div>
-      <a href={PORTFOLIO_URL} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm text-brand-soft hover:underline">
+      <a href={PORTFOLIO_URL} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block text-sm text-slate-300 hover:text-white hover:underline">
         📘 Portfolio →
       </a>
     </div>
